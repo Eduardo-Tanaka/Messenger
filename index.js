@@ -29,12 +29,12 @@ function setupGreetingText(res) {
     "greeting": [
       {
         "locale": "default",
-        "text": "Bem vindo clique no botão abaixo para começarmos a conversar!"
-      }, 
+        "text": "Bem vindo {{user_first_name}}! Clique no botão abaixo para começarmos a conversar!"
+      }/*, 
       {
         "locale": "en_US",
         "text": "Greeting text for en_US local!"
-      }
+      }*/
     ]
   };
 
@@ -60,35 +60,31 @@ function setupPersistentMenu(res) {
     { "persistent_menu": [
       {
         "locale": "default",
-        "composer_input_disabled": true,
+        "composer_input_disabled": false,
         "call_to_actions": [
           {
-            "title":"Info",
-            "type":"nested",
+            "title": "Info",
+            "type": "nested",
             "call_to_actions": [
               {
-                "title":"Help",
-                "type":"postback",
-                "payload":"HELP_PAYLOAD"
+                "title": "Abrir",
+                "type": "postback",
+                "payload": "abrir"
               },
               {
-                "title":"Contact Me",
-                "type":"postback",
-                "payload":"CONTACT_INFO_PAYLOAD"
+                "title": "Info",
+                "type": "postback",
+                "payload": "info"
               }
             ]
           },
           {
-            "type":"web_url",
-            "title":"Visit website ",
-            "url":"http://www.techiediaries.com",
-            "webview_height_ratio":"full"
+            "type": "web_url",
+            "title": "Visit website ",
+            "url": "http://www.google.com",
+            "webview_height_ratio": "full"
           }
         ]
-      },
-      {
-        "locale":"zh_CN",
-        "composer_input_disabled":false
       }
     ]
   };  
@@ -292,7 +288,7 @@ function handlePostback(sender_psid, received_postback) {
     response = { "text": "Oops, tente mandar outra imagem." }
   } else if (payload === 'abrir') {
     response = { "text": "Vamos começar " }
-  } else if (payload === 'abrir') {
+  } else if (payload === 'info') {
     response = { "text": "Informações .... TODO ..." }
   } else if (payload === 'outro') {
     response = { "text": "Outro .... TODO ..." }
