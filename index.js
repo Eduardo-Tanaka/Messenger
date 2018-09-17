@@ -110,7 +110,7 @@ function setupPersistentMenu(res) {
 function setupGetStartedButton(res){
   var messageData = {
     "get_started": {
-      "payload":"getstarted"
+      "payload": "getstarted"
     }
   };
 
@@ -346,3 +346,6 @@ function callTypeOn(sender_psid, response) {
     }
   }); 
 }
+
+curl -X DELETE -H "Content-Type: application/json" -d '{\"fields\": [\"greeting\"]}' "https://graph.facebook.com/v2.6/me/messenger_profile?access_token=EAAEAlmkja4EBABizvV2J15vCmvNjdqXHJxf1QJkCUR5BO3tsVAy3lAUjt3u34uTT4R0uGseqIl22B1qamWgbSIIDNfros3HlIjspxI6HvV8zhtZA2LR9Y2pS95h0XlOr97ZCE2UxdJheJeT2ZCkYmVhwtCxtZB3YdqeK966PAQZDZD"
+curl -X GET "https://graph.facebook.com/v2.6/me/messenger_profile?fields=greeting&access_token=EAAEAlmkja4EBABizvV2J15vCmvNjdqXHJxf1QJkCUR5BO3tsVAy3lAUjt3u34uTT4R0uGseqIl22B1qamWgbSIIDNfros3HlIjspxI6HvV8zhtZA2LR9Y2pS95h0XlOr97ZCE2UxdJheJeT2ZCkYmVhwtCxtZB3YdqeK966PAQZDZD"
