@@ -28,12 +28,12 @@ function setupGreetingText(res) {
   var messageData = {
     "greeting": [
       {
-        "locale":"default",
-        "text":"Greeting text for default local !"
+        "locale": "default",
+        "text": "Bem vindo clique no botão abaixo para começarmos a conversar!"
       }, 
       {
-        "locale":"en_US",
-        "text":"Greeting text for en_US local !"
+        "locale": "en_US",
+        "text": "Greeting text for en_US local!"
       }
     ]
   };
@@ -260,11 +260,42 @@ function handlePostback(sender_psid, received_postback) {
 
   // Set the response based on the postback payload
   if (payload === 'getstarted') {
-    response = { "text": "Começar Conversa!" }
+    response = {
+      "attachment": {
+        "type": "template",
+        "payload": {
+          "template_type": "button",
+          "text": "Bem vindo ! O que você gostaria de fazer?",
+          "buttons": [
+            {
+              "type": "postback",
+              "title": "Abrir",
+              "payload": "abrir"
+            },
+            {
+              "type": "postback",
+              "title": "Informações",
+              "payload": "info"
+            },
+            {
+              "type": "postback",
+              "title": "Outro",
+              "payload": "outro"
+            }
+          ]
+        }
+      }
+    }
   } else if (payload === 'sim') {
     response = { "text": "Obrigado!" }
   } else if (payload === 'nao') {
     response = { "text": "Oops, tente mandar outra imagem." }
+  } else if (payload === 'abrir') {
+    response = { "text": "Vamos começar " }
+  } else if (payload === 'abrir') {
+    response = { "text": "Informações .... TODO ..." }
+  } else if (payload === 'outro') {
+    response = { "text": "Outro .... TODO ..." }
   }
   // Send the message to acknowledge the postback
   callSendAPI(sender_psid, response);
