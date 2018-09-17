@@ -18,6 +18,124 @@ const PAGE_ACCESS_TOKEN = process.env.PAGE_ACCESS_TOKEN;
 // Sets server port and logs message on success
 app.listen(process.env.PORT || 1337, () => console.log('webhook is listening'));
 
+app.get('/setup',function(req, res) {
+  setupGetStartedButton(res);
+  setupPersistentMenu(res);
+  setupGreetingText(res);
+});
+
+function setupGreetingText(res) {
+  var messageData = {
+    "greeting": [
+      {
+        "locale":"default",
+        "text":"Greeting text for default local !"
+      }, 
+      {
+        "locale":"en_US",
+        "text":"Greeting text for en_US local !"
+      }
+    ]
+  };
+
+  request({
+    url: 'https://graph.facebook.com/v2.6/me/messenger_profile?access_token=' + PAGE_ACCESS_TOKEN,
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    form: messageData
+  }, (error, response, body) => {
+    if (!error && response.statusCode == 200) {
+      // Print out the response body
+      res.send(body);
+    } else { 
+      // TODO: Handle errors
+      console.error(error);
+      res.send(body);
+    }
+  });
+}
+
+function setupPersistentMenu(res) {
+  var messageData = 
+    { "persistent_menu": [
+      {
+        "locale": "default",
+        "composer_input_disabled": true,
+        "call_to_actions": [
+          {
+            "title":"Info",
+            "type":"nested",
+            "call_to_actions": [
+              {
+                "title":"Help",
+                "type":"postback",
+                "payload":"HELP_PAYLOAD"
+              },
+              {
+                "title":"Contact Me",
+                "type":"postback",
+                "payload":"CONTACT_INFO_PAYLOAD"
+              }
+            ]
+          },
+          {
+            "type":"web_url",
+            "title":"Visit website ",
+            "url":"http://www.techiediaries.com",
+            "webview_height_ratio":"full"
+          }
+        ]
+      },
+      {
+        "locale":"zh_CN",
+        "composer_input_disabled":false
+      }
+    ]
+  };  
+
+  // Start the request
+  request({
+    url: "https://graph.facebook.com/v2.6/me/messenger_profile?access_token=" + PAGE_ACCESS_TOKEN,
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    form: messageData
+  }, (error, response, body) => {
+    if (!error && response.statusCode == 200) {
+      // Print out the response body
+      res.send(body);
+    } else { 
+      // TODO: Handle errors
+      console.error(error);
+      res.send(body);
+    }
+  });
+}
+
+function setupGetStartedButton(res){
+  var messageData = {
+    "get_started": {
+      "payload":"getstarted"
+    }
+  };
+
+  // Start the request
+  request({
+    url: "https://graph.facebook.com/v2.6/me/messenger_profile?access_token=" + PAGE_ACCESS_TOKEN,
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    form: messageData
+  }, (error, response, body) => {
+    if (!error && response.statusCode == 200) {
+      // Print out the response body
+      res.send(body);
+    } else { 
+      // TODO: Handle errors
+      console.error(error);
+      res.send(body);
+    }
+  });
+}
+
 // Creates the endpoint for our webhook 
 app.post('/webhook', (req, res) => {  
  
@@ -53,7 +171,6 @@ app.post('/webhook', (req, res) => {
     // Returns a '404 Not Found' if event is not from a page subscription
     res.sendStatus(404);
   }
-
 });
 
 // Adds support for GET requests to our webhook
@@ -128,6 +245,8 @@ function handleMessage(sender_psid, received_message) {
     }
   } 
   
+  callTypeOn(sender_psid, response);
+
   // Sends the response message
   callSendAPI(sender_psid, response); 
 }
@@ -140,7 +259,9 @@ function handlePostback(sender_psid, received_postback) {
   let payload = received_postback.payload;
 
   // Set the response based on the postback payload
-  if (payload === 'sim') {
+  if (payload === 'getstarted') {
+    response = { "text": "Começar Conversa!" }
+  } else if (payload === 'sim') {
     response = { "text": "Obrigado!" }
   } else if (payload === 'nao') {
     response = { "text": "Oops, tente mandar outra imagem." }
@@ -157,6 +278,31 @@ function callSendAPI(sender_psid, response) {
       "id": sender_psid
     },
     "message": response
+  }
+
+  // Send the HTTP request to the Messenger Platform
+  request({
+    "uri": "https://graph.facebook.com/v2.6/me/messages",
+    "qs": { "access_token": PAGE_ACCESS_TOKEN },
+    "method": "POST",
+    "json": request_body
+  }, (err, res, body) => {
+    if (!err) {
+      console.log('message sent!')
+    } else {
+      console.error("Unable to send message:" + err);
+    }
+  }); 
+}
+
+// Sends response messages via the Send API
+function callTypeOn(sender_psid, response) {
+  // Construct the message body
+  let request_body = {
+    "recipient": {
+      "id": sender_psid
+    },
+    "sender_action": "typing_on"
   }
 
   // Send the HTTP request to the Messenger Platform
