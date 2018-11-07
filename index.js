@@ -29,7 +29,7 @@ function setupGreetingText(res) {
     "greeting": [
       {
         "locale": "default",
-        "text": "Bem vindo {{user_first_name}}! Clique no botão abaixo para começarmos a conversar!"
+        "text": "Bem vindo {{user_first_name}}!!! Clique no botão abaixo para começarmos a conversar!"
       }/*, 
       {
         "locale": "en_US",
