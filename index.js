@@ -20,7 +20,7 @@ app.listen(process.env.PORT || 1337, () => console.log('webhook is listening'));
 
 app.get('/setup',function(req, res) {
   setupGetStartedButton(res);
-  setupPersistentMenu(res);
+  //setupPersistentMenu(res);
   setupGreetingText(res);
 });
 
