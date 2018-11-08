@@ -19,13 +19,41 @@ const PAGE_ACCESS_TOKEN = process.env.PAGE_ACCESS_TOKEN;
 // Sets server port and logs message on success
 app.listen(process.env.PORT || 1337, () => console.log('webhook is listening'));
 
-app.get('/setupButton',function(req, res) {
+app.delete('/deleteGreeting', function(req, res) {
+  deleteGreetingText(res);
+});
+
+app.get('/setupButton', function(req, res) {
   setupGetStartedButton(res);
 });
 
-app.get('/setupGreeting',function(req, res) {
+app.get('/setupGreeting', function(req, res) {
   setupGreetingText(res);
 });
+
+function deleteGreetingText(res) {
+  var messageData = {
+    "fields": [
+      "greeting"
+    ]
+  };
+
+  request({
+    url: 'https://graph.facebook.com/v2.6/me/messenger_profile?access_token=' + PAGE_ACCESS_TOKEN,
+    method: 'DELETE',
+    headers: { 'Content-Type': 'application/json' },
+    form: messageData
+  }, (error, response, body) => {
+    if (!error && response.statusCode == 200) {
+      // Print out the response body
+      res.send(body);
+    } else { 
+      // TODO: Handle errors
+      console.error(error);
+      res.send(body);
+    }
+  });
+}
 
 function setupGreetingText(res) {
   var messageData = {
@@ -247,7 +275,7 @@ function handleMessage(sender_psid, received_message) {
   
   callTypeOn(sender_psid, response);
 
-  sleep.msleep(500);
+  sleep.msleep(750);
 
   // Sends the response message
   callSendAPI(sender_psid, response); 
