@@ -19,7 +19,7 @@ const PAGE_ACCESS_TOKEN = process.env.PAGE_ACCESS_TOKEN;
 // Sets server port and logs message on success
 app.listen(process.env.PORT || 1337, () => console.log('webhook is listening'));
 
-app.delete('/deleteGreeting', function(req, res) {
+app.get('/deleteGreeting', function(req, res) {
   deleteGreetingText(res);
 });
 
