@@ -7,6 +7,7 @@ const
   app = express().use(bodyParser.json()); // creates express http server
 
 const request = require('request');
+var sleep = require('sleep');
 
 // carrega os valores do arquivo .env quando não for em produção, setar as variáveis de ambiente no provedor para usar em produção  
 if (process.env.NODE_ENV !== 'production') {
@@ -246,8 +247,10 @@ function handleMessage(sender_psid, received_message) {
   
   callTypeOn(sender_psid, response);
 
+  sleep.msleep(500);
+
   // Sends the response message
-  setTimeout(callSendAPI(sender_psid, response), 3000);
+  callSendAPI(sender_psid, response); 
 }
 
 // Handles messaging_postbacks events
