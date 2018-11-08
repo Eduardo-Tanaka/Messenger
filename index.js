@@ -18,9 +18,11 @@ const PAGE_ACCESS_TOKEN = process.env.PAGE_ACCESS_TOKEN;
 // Sets server port and logs message on success
 app.listen(process.env.PORT || 1337, () => console.log('webhook is listening'));
 
-app.get('/setup',function(req, res) {
+app.get('/setupButton',function(req, res) {
   setupGetStartedButton(res);
-  //setupPersistentMenu(res);
+});
+
+app.get('/setupGreeting',function(req, res) {
   setupGreetingText(res);
 });
 
@@ -29,7 +31,7 @@ function setupGreetingText(res) {
     "greeting": [
       {
         "locale": "default",
-        "text": "Bem vindo {{user_first_name}}!!! Clique no botão abaixo para começarmos a conversar!"
+        "text": "Bem vindo {{user_first_name}}!!! Clique no botão para começarmos a conversar!"
       }/*, 
       {
         "locale": "en_US",
