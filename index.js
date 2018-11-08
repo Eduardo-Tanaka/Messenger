@@ -245,9 +245,9 @@ function handleMessage(sender_psid, received_message) {
   } 
   
   callTypeOn(sender_psid, response);
-  Thread.sleep(3000);
+
   // Sends the response message
-  callSendAPI(sender_psid, response); 
+  setTimeout(callSendAPI(sender_psid, response), 3000);
 }
 
 // Handles messaging_postbacks events
