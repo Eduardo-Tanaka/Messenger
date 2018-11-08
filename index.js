@@ -31,6 +31,20 @@ app.get('/setupGreeting', function(req, res) {
   setupGreetingText(res);
 });
 
+app.get('/image/:psid', function(req, res) {
+  console.log(req.params.psid);
+  var requestSettings = {
+    url: 'https://scontent.xx.fbcdn.net/v/t1.15752-9/45800808_257203701660498_5134775673159680000_n.jpg?_nc_cat=103&_nc_ad=z-m&_nc_cid=0&_nc_ht=scontent.xx&oh=15c0375e99367022359d1ddef40cfeb3&oe=5C7E77EC',
+    method: 'GET',
+    encoding: null
+  }
+
+  request(requestSettings, function(error, reponse, body) {
+    res.set('Content-Type', 'image/png');
+    res.send(body);
+  });
+});
+
 function deleteGreetingText(res) {
   var messageData = {
     "fields": [
