@@ -32,11 +32,7 @@ function setupGreetingText(res) {
       {
         "locale": "default",
         "text": "Bem vindo {{user_first_name}}!!! Clique no botão para começarmos a conversar!"
-      }/*, 
-      {
-        "locale": "en_US",
-        "text": "Greeting text for en_US local!"
-      }*/
+      }
     ]
   };
 
@@ -209,7 +205,7 @@ function handleMessage(sender_psid, received_message) {
     // Create the payload for a basic text message, which
     // will be added to the body of our request to the Send API
     response = {
-      "text": `You sent the message: "${received_message.text}". Now send me an image!`
+      "text": `Você enviou a mensagem: "${received_message.text}". Agora envie uma imagem!`
     }
   } else if (received_message.attachments) {
   
@@ -235,6 +231,11 @@ function handleMessage(sender_psid, received_message) {
                 "type": "postback",
                 "title": "Não!",
                 "payload": "nao",
+              },
+              {
+                "type": "postback",
+                "title": "Começar!",
+                "payload": "getstarted",
               }
             ],
           }]
@@ -244,7 +245,7 @@ function handleMessage(sender_psid, received_message) {
   } 
   
   callTypeOn(sender_psid, response);
-
+  Thread.sleep(3000);
   // Sends the response message
   callSendAPI(sender_psid, response); 
 }
